@@ -1,46 +1,54 @@
-﻿List<Person>persons = new List<Person>
+﻿
+// Задание 1
+object obj = new Car(new Engine(105));
+
+var isCarWith105HP = obj switch
 {
-        new Person { Name = "Maksim", City = "Vladimir" },
-        new Person { Name = "Nikita", City = "Moscow" },
-        new Person { Name = "Nasty", City = "Vladimir" },
-        new Person { Name = "Won", City = "Seul" }
-    };
-List<Weather>weathers = new List<Weather>
+    105 => true,
+    _ => false,
+};
+
+Console.WriteLine(isCarWith105HP);
+
+
+// Задание 2
+object obj2 = new Car(new Engine(105));
+
+if (obj2 is Car res)
+{
+    Console.WriteLine(res.Engine.Power);
+}
+
+// Задание 3
+object obj3 = new Car(new Engine(90));
+object obj4 = new Motorcycle(new Engine(80));
+
+static bool IsLowPowerVehicle(object vehicle, bool isElectro) => (vehicle,isElectro) switch
+{
+    (_, true) => false,
+    (Motorcycle and { Engine.Power: < 100 },_)  => true,
+    (Car and { Engine.Power: < 100 }, _) => true,
+    (SmartCar smartCar,_) => smartCar.IsLowPowerVehicle,
+    (null,_) => throw new ArgumentNullException(),
+    _ => throw new ArgumentException(),
+};
+
+var isLowPower1 = IsLowPowerVehicle(obj3,true);
+var isLowPower2 = IsLowPowerVehicle(obj4, false);
+var isLowPower3 = IsLowPowerVehicle(42, false);
+
+
+public record Engine(int Power);
+public record Motorcycle(Engine Engine);
+public record SmartCar(bool IsLowPowerVehicle);
+public class Car
+{
+    public Engine Engine { get; }
+
+    public Car(Engine engine)
     {
-        new Weather { Now = "Solar", City = "Moscow" },
-        new Weather { Now = "Rainy", City = "Tallin" },
-        new Weather { Now = "Cold", City = "Vladimir" },
-    };
-
-var personWithWeatherInner = from person in persons
-                             join weather in weathers on person.City equals weather.City
-                             select new { Name = person.Name, City = person.City, Now = weather.Now };
-
-
-foreach (var info in personWithWeatherInner) 
-{
-    Console.WriteLine(info);
+        Engine = engine ?? throw new ArgumentNullException(nameof(engine));
+    }
 }
 
-var personWithWeatherLeft = from person in persons
-                             join weather in weathers on person.City equals weather.City into weatherList
-                             from weather in weatherList.DefaultIfEmpty()
-                             select new { Name = person.Name, City = person.City, Now = weather?.Now };
 
-
-foreach (var info in personWithWeatherLeft)
-{
-    Console.WriteLine(info);
-}
-
-public class Person
-{
-    public string Name { get; set; }
-    public string City { get; set; }
-}
-
-public class Weather
-{
-    public string Now { get; set; }
-    public string City { get; set; }
-}
