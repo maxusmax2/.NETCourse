@@ -89,12 +89,14 @@ public class UnitTest2
                 Description = "4"
             }
         };
-        var joined = Extensions.LeftJoin(collection1, collection2);
-        Assert.Equal("1", collection1.First(x => x.Id == 1).Description);
-        Assert.Equal("2", collection1.First(x => x.Id == 2).Description);
-        Assert.Null(collection1.First(x => x.Id == 3).Description);
-        Assert.Equal("4", collection1.First(x => x.Id == 4).Description);
-        Assert.Equal("8", collection1.First(x => x.Id == 8).Description);
+
+        var joined = Extensions.LeftJoin(collection1, collection2).ToList();
+        
+        Assert.Equal("1", joined.First(x => x.Id == 1).Description);
+        Assert.Equal("2", joined.First(x => x.Id == 2).Description);
+        Assert.Null(joined.First(x => x.Id == 3).Description);
+        Assert.Equal("4", joined.First(x => x.Id == 4).Description);
+        Assert.Equal("8", joined.First(x => x.Id == 8).Description);
     }
     
 }

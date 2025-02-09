@@ -6,6 +6,6 @@ public static class Extensions
     {
         if (!items1.Any() || !items2.Any())
             throw new EmptyCollectionException();
-        return items1.MyLeftJoin(items2, x => x.Id, y => y.Id, (x, y,id) => new Item1() { Id=x.Id,Description= x?.Description ?? y?.Description});
+        return items1.MyLeftJoin(items2, x => x.Id, y => y.Id, (x, y,id) => new Item1() { Id = x.Id, Description= x?.Description ?? y?.Description});
     }
 }

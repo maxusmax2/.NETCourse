@@ -51,7 +51,6 @@ public class MyLeftJoinIterator<T1, T2, TJoin, TReturn> : IEnumerable<TReturn>, 
             {
 
                 _seqEnumeratorTwo.Reset();
-                _seqEnumeratorTwo.MoveNext();
 
                 if (_findJoin)
                 {
